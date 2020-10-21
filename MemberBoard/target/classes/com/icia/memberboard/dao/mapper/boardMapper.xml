@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Board">
+	<insert id="boardWrite" parameterType="board">
+		INSERT INTO BOARD2(BNUMBER,BWRITER,BTITLE,BCONTENTS,BDATE,BHITS,BFILENAME) 
+		VALUES(SEQ_BOARD2.NEXTVAL,#{bwriter},#{btitle},#{bcontents},TO_CHAR(SYSDATE,'YYYY/MM/DD HH24:MI'),0,#{bfilename})
+	</insert>
+	
+	<select	id="boardList" resultType="board">
+		SELECT * FROM BOARD2 ORDER BY BNUMBER DESC
+	</select>
+	
+	<select id="boardListCount" resultType="int">
+		SELECT COUNT(BNUMBER)
+		FROM BOARD2 <include refid="search4"></include>
+	</select>
+	<sql id="search5">
+		<choose>
+			<when test="searchtype=='searchtitle'">
+				WHERE BTITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="searchtype=='searchwriter'">
+				WHERE BWRITER LIKE '%'||#{keyword}||'%'
+			</when>
+		</choose>
+	</sql>
+	
+	<select id="boardListPaging" parameterType="page" resultType="board">
+		SELECT * FROM (SELECT B.*, ROW_NUMBER() OVER(ORDER BY BNUMBER DESC) AS RN FROM BOARD2 B 
+		<include refid="search3"></include>) WHERE RN BETWEEN #{startRow} AND #{endRow}
+	</select>
+	<sql id="search3">
+		<choose>
+			<when test="searchtype=='searchtitle'">
+				WHERE BTITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="searchtype=='searchwriter'">
+				WHERE BWRITER LIKE '%'||#{keyword}||'%'
+			</when>
+		</choose>
+	</sql>
+	
+	<select id="boardListPaging2" parameterType="page" resultType="board">
+		SELECT * FROM (SELECT B.*, ROW_NUMBER() OVER(ORDER BY BHITS DESC) AS RN FROM BOARD2 B 
+		<include refid="search4"></include>) WHERE RN BETWEEN #{startRow} AND #{endRow}
+	</select>
+	<sql id="search4">
+		<choose>
+			<when test="searchtype=='searchtitle'">
+				WHERE BTITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="searchtype=='searchwriter'">
+				WHERE BWRITER LIKE '%'||#{keyword}||'%'
+			</when>
+		</choose>
+	</sql>
+	
+	<update id="bhitsup" parameterType="board">
+		UPDATE BOARD2 SET
+		BHITS=BHITS+1 WHERE BNUMBER=#{bnumber}
+	</update>
+	
+	<select id="boardView" parameterType="board" resultType="board">
+		SELECT *
+		FROM BOARD2 WHERE BNUMBER=#{bnumber}
+	</select>
+	
+	
+	<select id="boardUpdate" parameterType="board" resultType="board">
+		SELECT * FROM BOARD2 WHERE BNUMBER=#{bnumber}
+	</select>
+	<select id="boardSearch" resultType="board">
+		SELECT * FROM (SELECT B.*, ROW_NUMBER() OVER(ORDER BY BNUMBER DESC) AS RN FROM BOARD2 B <include refid="search"></include>) WHERE RN BETWEEN #{startRow} AND #{endRow}
+	</select>
+
+	<sql id="search">
+		<choose>
+			<when test="searchtype=='searchtitle'">
+				WHERE BTITLE LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="searchtype=='searchwriter'">
+				WHERE BWRITER LIKE '%'||#{keyword}||'%'
+			</when>
+		</choose>
+	</sql>
+	<select id="boardSearch2" resultType="board">
+		SELECT * FROM (SELECT B.*, ROW_NUMBER() OVER(ORDER BY BHITS DESC) AS RN FROM BOARD2 B <include refid="search2"></include>
+	</select>
+
+	<sql id="search2">
+		<choose>
+			<when test="searchtype=='searchtitle'">
+				WHERE BTITLE LIKE '%'||#{keyword}||'%') WHERE RN BETWEEN #{startRow} AND #{endRow}
+			</when>
+			<when test="searchtype=='searchwriter'">
+				WHERE BWRITER LIKE '%'||#{keyword}||'%') WHERE RN BETWEEN #{startRow} AND #{endRow}
+			</when>
+		</choose>
+	</sql>
+	<update id="boardModify" parameterType="board">
+		UPDATE BOARD2 SET BTITLE = #{btitle} , BCONTENTS = #{bcontents} WHERE BNUMBER = #{bnumber}
+	</update>
+</mapper>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

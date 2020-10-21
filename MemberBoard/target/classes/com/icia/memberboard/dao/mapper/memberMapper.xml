@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Member">
+	<insert id="memberJoin" parameterType="member">
+		INSERT INTO
+		MEMBER2(MID,MPASSWORD,MNAME,MPHONE,MEMAIL,MADDRESS,MBIRTH,MPROFILE)
+		VALUES(#{mid},#{mpassword},#{mname},#{mphone},#{memail},#{maddress},#{mbirth},#{mprofile})
+	</insert>
+	<insert id="kakaoMemberJoin" parameterType="member">
+		INSERT INTO
+		MEMBER2(MID,MPASSWORD,MNAME,MPHONE,MEMAIL,MADDRESS,MBIRTH,MPROFILE,KAKAOID)
+		VALUES(#{mid},#{mpassword},#{mname},#{mphone},#{memail},#{mbirth},#{maddress},#{mprofile},#{kakaoId})
+	</insert>
+	<insert id="NaverMemberJoin" parameterType="member">
+		INSERT INTO
+		MEMBER2(MID,MPASSWORD,MNAME,MPHONE,MEMAIL,MADDRESS,MBIRTH,MPROFILE,NAVERID)
+		VALUES(#{mid},#{mpassword},#{mname},#{mphone},#{memail},#{mbirth},#{maddress},#{mprofile},#{naverId})
+	</insert>
+
+	<select id="idOverlap" parameterType="String"
+		resultType="String">
+		SELECT MID FROM MEMBER2 WHERE MID=#{mid}
+	</select>
+	
+	<select id="memberLogin" parameterType="String" resultType="String">
+		SELECT MID FROM MEMBER2 WHERE MID=#{mid} AND MPASSWORD=#{mpassword}
+	</select>
+	
+	<select id="memberList" resultType="member">
+		SELECT * FROM MEMBER2
+	</select>
+	
+	<select id="memberView" parameterType="String" resultType="member">
+		SELECT * FROM MEMBER2 WHERE MID=#{mid}
+	</select>
+	
+	<select id="memberUpdate" parameterType="String" resultType="member">
+		SELECT * FROM MEMBER2 WHERE MID=#{mid}
+	</select>
+	<update id="memberModify" parameterType="member">
+		UPDATE MEMBER2 SET MPASSWORD=#{mpassword},MEMAIL=#{memail},MADDRESS=#{maddress} WHERE MID=#{mid} 
+	</update>
+</mapper>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
